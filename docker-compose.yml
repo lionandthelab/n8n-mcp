@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+    volumes:
+      - n8n-data:/home/node/.n8n
+
+  n8n-mcp:
+    build: .
+    depends_on:
+      - n8n
+    environment:
+      - N8N_BASE=http://n8n:5678
+      - N8N_API_KEY=${N8N_API_KEY:?set}
+
+volumes:
+  n8n-data:
